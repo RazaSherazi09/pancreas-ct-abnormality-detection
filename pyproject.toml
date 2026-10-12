@@ -1,0 +1,19 @@
+[project]
+name = "pancreas-ct-abnormality-detection"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "RazaSherazi09", email = "183750782+RazaSherazi09@users.noreply.github.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "modal>=1.6.1",
+]
+
+[project.scripts]
+pancreas-ct-abnormality-detection = "pancreas_ct_abnormality_detection:main"
+
+[build-system]
+requires = ["uv_build>=0.12.13,<0.13.0"]
+build-backend = "uv_build"
