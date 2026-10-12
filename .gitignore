@@ -1,0 +1,26 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+env/
+.venv/
+
+# Data and Checkpoints (Kept in Modal Volume / HF)
+*.nii
+*.nii.gz
+*.png
+*.npy
+*.pth
+*.pt
+data/
+checkpoints/
+mlruns/
+.modal/
+
+# IDE & OS
+.vscode/
+.DS_Store
+*.log
