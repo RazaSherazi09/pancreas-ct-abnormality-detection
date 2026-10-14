@@ -34,7 +34,7 @@ We replicate and systematically ablate the deep learning framework proposed by *
 * **Authors:** X. Qiu, Y. Zhang, L. Wang, et al.
 * **Year & Venue:** 2024 | *Frontiers in Oncology*
 * **SJR Ranking:** **Q1** (Oncology / Radiology, Nuclear Medicine and Imaging)
-* **Reported Base Metrics:** Dice Similarity Coefficient (DSC) $\approx \mathbf{74.20\%}$, IoU $\approx \mathbf{58.90\%}$, Sensitivity $\approx \mathbf{84.10\%}$, Specificity $\approx \mathbf{99.80\%}$
+* **Reported Base Metrics:** Dice Similarity Coefficient (DSC) ≈ **74.20%**, IoU ≈ **58.90%**, Sensitivity ≈ **84.10%**, Specificity ≈ **99.80%**
 
 ---
 
@@ -44,37 +44,36 @@ Our study systematically documents four sequential experimental regimes:
 
 1. **Experiment 1 — Baseline Replication (Strict Deterministic Setup):**
    * Multi-Scale U-Net featuring a dual-branch encoder with parallel $1\times1$, $3\times3$, and $5\times5$ convolutional kernels.
-   * Standard soft-tissue Hounsfield Unit windowing ($[-100, +240]\text{ HU}$) with min-max normalization to $[0, 1]$.
-   * Symmetric composite loss: $\mathcal{L} = 0.5\,\mathcal{L}_{\text{Dice}} + 0.5\,\mathcal{L}_{\text{BCE}}$.
+   * Standard soft-tissue Hounsfield Unit windowing ($[-100, +240]$ HU) with min-max normalization to $[0, 1]$.
+   * Symmetric composite loss: $`\mathcal{L} = 0.5\,\mathcal{L}_{\text{Dice}} + 0.5\,\mathcal{L}_{\text{BCE}}`$.
    * No data augmentation.
    * **Outcome:** Achieved **71.13% DSC**, **55.73% IoU**, **82.73% Sensitivity**, and **99.76% Specificity**.
 
 2. **Experiment 2 — Adaptive Contrast Enhancement via CLAHE + Augmentation (`exp1` in codebase):**
-   * Applied localized Contrast-Limited Adaptive Histogram Equalization ($\alpha_{\text{clip}} = 2.0$, $8\times8$ grid).
+   * Applied localized Contrast-Limited Adaptive Histogram Equalization ($`\alpha_{\text{clip}} = 2.0`$, $8\times8$ grid).
    * Synchronized stochastic geometric augmentations: horizontal/vertical flips ($p=0.5$) and affine rotations ($\pm 10^\circ$).
-   * **Outcome:** Sensitivity jumped to **93.31%** ($+10.58\%$ over baseline), but symmetric BCE caused boundary dilation into retroperitoneal fat (DSC dropped to $0.6731$).
+   * **Outcome:** Sensitivity jumped to **93.31%** (**+10.58%** over baseline), but symmetric BCE caused boundary dilation into retroperitoneal fat (DSC dropped to **0.6731**).
 
 3. **Experiment 3 — Standalone Asymmetric Loss: Pure Focal Tversky Loss (`exp2` in codebase):**
-   * Implemented pure Focal Tversky Loss (FTL) with $\alpha=0.6$ (heavier penalty on False Positives), $\beta=0.4$, and $\gamma=1.33$, alongside calibrated CLAHE ($\alpha_{\text{clip}} = 1.2$).
-   * **Outcome:** Severe optimization collapse (DSC dropped to **0.4972**, validation loss stalled at $0.7111$).
-   * **Root Cause Analysis:** Without point-wise convex BCE gradients, regional scalar fractions vanish during early training under extreme class imbalance ($<1.5\%$ foreground pancreas), causing contour instability.
+   * Implemented pure Focal Tversky Loss (FTL) with $\alpha=0.6$ (heavier penalty on False Positives), $\beta=0.4$, and $\gamma=1.33$, alongside calibrated CLAHE ($`\alpha_{\text{clip}} = 1.2`$).
+   * **Outcome:** Severe optimization collapse (DSC dropped to **0.4972**, validation loss stalled at **0.7111**).
+   * **Root Cause Analysis:** Without point-wise convex BCE gradients, regional scalar fractions vanish during early training under extreme class imbalance (**< 1.5%** foreground pancreas), causing contour instability.
 
 4. **Experiment 4 — Composite Hybrid Tversky–BCE Optimization (`exp3` in codebase):**
-   * Formulated a composite objective combining point-wise BCE anchors with an asymmetric Tversky penalty:
-     $$\mathcal{L}_{\text{Hybrid}} = 0.5\,\mathcal{L}_{\text{BCE}} + 0.5\,\mathcal{L}_{\text{Tversky}} \quad (\alpha=0.7, \beta=0.3)$$
-   * Integrated calibrated CLAHE ($\alpha_{\text{clip}} = 1.2$) and regularized spatial augmentations ($\pm 8^\circ$).
-   * **Outcome:** Immediate stabilization and recovery—validation DSC climbed to **0.6680** ($+17.08\%$ over pure FTL), maintaining a clinical sensitivity of **92.80%** and specificity of **99.57%**.
+   * Formulated a composite objective combining point-wise BCE anchors with an asymmetric Tversky penalty: $`\mathcal{L}_{\text{Hybrid}} = 0.5\,\mathcal{L}_{\text{BCE}} + 0.5\,\mathcal{L}_{\text{Tversky}}`$ ($\alpha=0.7$, $\beta=0.3$).
+   * Integrated calibrated CLAHE ($`\alpha_{\text{clip}} = 1.2`$) and regularized spatial augmentations ($\pm 8^\circ$).
+   * **Outcome:** Immediate stabilization and recovery—validation DSC climbed to **0.6680** (**+17.08%** over pure FTL), maintaining a clinical sensitivity of **92.80%** and specificity of **99.57%**.
 
 ---
 
 ## 📊 Comprehensive Ablation Results
 
-Evaluated on $1,348$ validation axial CT slices from the MSD Task07 Pancreas cohort:
+Evaluated on **1,348** validation axial CT slices from the MSD Task07 Pancreas cohort:
 
 | Metric | Base Paper | Exp 1: Baseline (`baseline`) | Exp 2: CLAHE (`exp1`) | Exp 3: Pure FTL (`exp2`) | Exp 4: Hybrid Tversky–BCE (`exp3`) |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Loss Objective** | Hybrid Regional+BCE | Symmetric Dice+BCE | Symmetric Dice+BCE | Pure Focal Tversky | **Hybrid Tversky–BCE** |
-| **Preprocessing** | Standard HU | $[-100, +240]\text{ HU}$ | CLAHE ($\alpha=2.0$) | CLAHE ($\alpha=1.2$) | **CLAHE ($\alpha=1.2$)** |
+| **Preprocessing** | Standard HU | $[-100, +240]$ HU | CLAHE ($\alpha=2.0$) | CLAHE ($\alpha=1.2$) | **CLAHE ($\alpha=1.2$)** |
 | **Augmentation** | Spatial Affine | Deterministic (None) | Flips + Rot ($\pm10^\circ$) | Flips + Rot ($\pm8^\circ$) | **Flips + Rot ($\pm8^\circ$)** |
 | **Sensitivity (Recall)** | 0.8410 | 0.8273 | **0.9331** | 0.9081 | **0.9280** |
 | **Specificity** | 0.9980 | **0.9976** | 0.9958 | 0.9873 | **0.9957** |
