@@ -1,0 +1,144 @@
+{
+    "split": "Validation Set",
+    "num_slices": 1348,
+    "base_paper_benchmark": {
+        "dice": 0.742,
+        "iou": 0.589,
+        "sensitivity": 0.841,
+        "specificity": 0.998
+    },
+    "part1_baseline": {
+        "dice": 0.7113,
+        "iou": 0.5573,
+        "sensitivity": 0.8273,
+        "specificity": 0.9976
+    },
+    "runs": [
+        {
+            "run_id": 1,
+            "label": "Run 1: Att-ResUNet (Base)",
+            "short": "R1: Att-ResUNet",
+            "student": "Student 1 (Syed Muhammad Raza)",
+            "arch": "att_resunet",
+            "feature_mode": "none",
+            "params": 8202333,
+            "split": "Validation Set",
+            "dice": 0.762,
+            "iou": 0.6216,
+            "sensitivity": 0.8554,
+            "specificity": 0.9981,
+            "precision": 0.6932,
+            "confusion_matrix": {
+                "TP": 372354,
+                "FP": 164828,
+                "TN": 87740348,
+                "FN": 64998
+            }
+        },
+        {
+            "run_id": 2,
+            "label": "Run 2: Att-ResUNet + LBP",
+            "short": "R2: +LBP",
+            "student": "Student 1 (Syed Muhammad Raza)",
+            "arch": "att_resunet",
+            "feature_mode": "lbp",
+            "params": 8214989,
+            "split": "Validation Set",
+            "dice": 0.7637,
+            "iou": 0.623,
+            "sensitivity": 0.8531,
+            "specificity": 0.9982,
+            "precision": 0.6963,
+            "confusion_matrix": {
+                "TP": 369016,
+                "FP": 160931,
+                "TN": 87744245,
+                "FN": 68336
+            }
+        },
+        {
+            "run_id": 3,
+            "label": "Run 3: Att-ResUNet + Gabor",
+            "short": "R3: +Gabor",
+            "student": "Student 1 (Syed Muhammad Raza)",
+            "arch": "att_resunet",
+            "feature_mode": "gabor",
+            "params": 8216285,
+            "split": "Validation Set",
+            "dice": 0.7707,
+            "iou": 0.6314,
+            "sensitivity": 0.843,
+            "specificity": 0.9983,
+            "precision": 0.7152,
+            "confusion_matrix": {
+                "TP": 364775,
+                "FP": 145287,
+                "TN": 87759889,
+                "FN": 72577
+            }
+        },
+        {
+            "run_id": 4,
+            "label": "Run 4: TransUNet-Lite (Base)",
+            "short": "R4: TransUNet",
+            "student": "Student 2 (Muhammad Ahmad)",
+            "arch": "transunet_lite",
+            "feature_mode": "none",
+            "params": 4952481,
+            "split": "Validation Set",
+            "dice": 0.7081,
+            "iou": 0.5542,
+            "sensitivity": 0.8841,
+            "specificity": 0.997,
+            "precision": 0.5945,
+            "confusion_matrix": {
+                "TP": 385525,
+                "FP": 262923,
+                "TN": 87642253,
+                "FN": 51827
+            }
+        },
+        {
+            "run_id": 5,
+            "label": "Run 5: TransUNet-Lite + HOG",
+            "short": "R5: +HOG",
+            "student": "Student 2 (Muhammad Ahmad)",
+            "arch": "transunet_lite",
+            "feature_mode": "hog",
+            "params": 5188289,
+            "split": "Validation Set",
+            "dice": 0.7318,
+            "iou": 0.5817,
+            "sensitivity": 0.8969,
+            "specificity": 0.9973,
+            "precision": 0.6215,
+            "confusion_matrix": {
+                "TP": 390494,
+                "FP": 237845,
+                "TN": 87667331,
+                "FN": 46858
+            }
+        },
+        {
+            "run_id": 6,
+            "label": "Run 6: TransUNet-Lite + LoG",
+            "short": "R6: +LoG",
+            "student": "Student 2 (Muhammad Ahmad)",
+            "arch": "transunet_lite",
+            "feature_mode": "log",
+            "params": 5188209,
+            "split": "Validation Set",
+            "dice": 0.728,
+            "iou": 0.5768,
+            "sensitivity": 0.8714,
+            "specificity": 0.9975,
+            "precision": 0.6319,
+            "confusion_matrix": {
+                "TP": 378511,
+                "FP": 220452,
+                "TN": 87684724,
+                "FN": 58841
+            }
+        }
+    ]
+}

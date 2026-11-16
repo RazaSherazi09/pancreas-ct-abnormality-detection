@@ -2,22 +2,28 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 class DiceBCELoss(nn.Module):
-    def __init__(self, dice_weight=0.5, bce_weight=0.5, smooth=1e-6):
+    """
+    FP32-safe composite Dice + Binary Cross-Entropy Loss for A10G / Ampere GPUs.
+    """
+    def __init__(self, dice_weight: float = 0.5, bce_weight: float = 0.5, smooth: float = 1e-6):
         super().__init__()
         self.dice_weight = dice_weight
         self.bce_weight = bce_weight
         self.smooth = smooth
 
-    def forward(self, preds, targets):
-        preds = preds.contiguous()
-        targets = targets.contiguous()
-        
+    def forward(self, preds: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+        preds = preds.float().contiguous()
+        targets = targets.float().contiguous()
+
         intersection = (preds * targets).sum(dim=(2, 3))
         union = preds.sum(dim=(2, 3)) + targets.sum(dim=(2, 3))
         dice_loss = 1.0 - (2.0 * intersection + self.smooth) / (union + self.smooth)
-        
-        bce_loss = F.binary_cross_entropy(preds, targets, reduction='mean')
+
+        preds_clamped = torch.clamp(preds, min=1e-6, max=1.0 - 1e-6)
+        bce_loss = F.binary_cross_entropy(preds_clamped, targets, reduction="mean")
+
         return (self.dice_weight * dice_loss.mean()) + (self.bce_weight * bce_loss)
 
 
@@ -75,3 +81,4 @@ class HybridTverskyBCELoss(nn.Module):
         tversky_loss = 1.0 - tversky_index
 
         return (self.bce_weight * bce) + (self.tversky_weight * tversky_loss.mean())
+    
